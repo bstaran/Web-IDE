@@ -18,12 +18,15 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
+      - name: Change directory
+        run: cd ./back
+
       - name: Create application.properties
         run: |
-          echo "${{ secrets.APPLICATION }}" > ./back/src/main/resources/application.properties
+          echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.properties
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./back/gradlew
+        run: chmod +x ./gradlew
 
       - name: Build without Test in Gradle
-        run: ./back/gradlew build -x test
+        run: ./gradlew build -x test
