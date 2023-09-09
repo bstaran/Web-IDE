@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - "back/**"
-    branches: [main, develop]
+    branches: [main, develop, feature/backend-cicd-test]
 
 jobs:
   build:
