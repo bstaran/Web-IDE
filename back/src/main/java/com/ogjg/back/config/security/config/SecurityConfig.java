@@ -27,7 +27,7 @@ import java.util.List;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -41,7 +41,9 @@ public class SecurityConfig {
                     "/api/users/signup",
                     "/api/users/login",
                     "/api/users/find-password/.*",
-                    "/health"
+                    "/health",
+                    "/ws/.*",
+                    "/chat/.*"
             ));
 
 

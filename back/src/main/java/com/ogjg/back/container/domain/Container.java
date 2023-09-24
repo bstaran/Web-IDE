@@ -1,5 +1,6 @@
 package com.ogjg.back.container.domain;
 
+import com.ogjg.back.chat.domain.Room;
 import com.ogjg.back.user.domain.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
@@ -27,6 +28,10 @@ public class Container {
 
     @Pattern(regexp = "^[a-zA-Z0-9\\-_]{1,20}$",
             message = "컨테이너 이름에는 영문, 숫자가 포함가능하며, 특수문자는 '-', '_'만 포함될 수 있습니다.")
+    @OneToOne
+    @JoinColumn(name = "room_id")
+    private Room room;
+
     private String name;
 
     private String description;
