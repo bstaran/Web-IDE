@@ -373,4 +373,9 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+### Application Settings ###
+application-local.yml
+application-dev.yml
+application-prod.yml
+
 # End of https://www.toptal.com/developers/gitignore/api/gradle,visualstudiocode,intellij+all,java,react,node,windows,macos
