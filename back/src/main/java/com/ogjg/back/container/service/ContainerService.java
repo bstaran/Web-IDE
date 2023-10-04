@@ -4,6 +4,7 @@ import com.ogjg.back.container.domain.Container;
 import com.ogjg.back.container.dto.request.ContainerCreateRequest;
 import com.ogjg.back.container.dto.response.ContainerCheckNameResponse;
 import com.ogjg.back.container.dto.response.ContainerGetResponse;
+import com.ogjg.back.container.dto.response.ContainersResponse;
 import com.ogjg.back.container.exception.DuplicatedContainerName;
 import com.ogjg.back.container.exception.NotFoundContainer;
 import com.ogjg.back.container.repository.ContainerRepository;
@@ -89,5 +90,50 @@ public class ContainerService {
         return allKeys.stream()
                 .map((key) -> createEmailRemovedKey(key, email))
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ContainersResponse> searchContainers(String query, String email) {
+
+        if (query.isEmpty()) {
+            List<Container> containers = containerRepository.findAllByName(email);
+            return containers.stream()
+                    .map(ContainersResponse::new)
+                    .toList();
+        }
+
+        List<Container> containers = containerRepository.findAllByNameContainingAndUserEmail(query, email);
+        return containers.stream()
+                .map(ContainersResponse::new)
+                .toList();
+    }
+
+    @Transactional
+    public boolean updatePrivateStatus(Long containerId, String email) {
+        Container container = containerRepository.findById(containerId)
+                .orElseThrow(NotFoundContainer::new);
+
+        container.updatePrivate(email);
+        containerRepository.save(container);
+        return container.getIsPrivate();
+    }
+
+    @Transactional
+    public void updateContainerInfo(Long containerId, String info, String email) {
+        Container container = containerRepository.findById(containerId)
+                .orElseThrow(() -> new NotFoundContainer("컨테이너가 존재하지 않습니다."));
+
+        container.updateDescription(email, info);
+        containerRepository.save(container);
+    }
+
+    @Transactional
+    public boolean updatePinStatus(Long containerId, String email) {
+        Container container = containerRepository.findById(containerId)
+                .orElseThrow(() -> new NotFoundContainer("컨테이너가 존재하지 않습니다."));
+
+        container.updatePinned(email);
+        containerRepository.save(container);
+        return container.getIsPinned();
     }
 }

@@ -2,6 +2,7 @@ package com.ogjg.back.container.domain;
 
 import com.ogjg.back.chat.domain.Room;
 import com.ogjg.back.user.domain.User;
+import com.ogjg.back.user.exception.UnauthorizedUserAccessException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
@@ -69,5 +70,26 @@ public class Container {
         this.isPinned = isPinned;
         this.modifiedAt = modifiedAt;
         this.createdAt = createdAt;
+    }
+
+    public void updatePrivate(String email) {
+        checkUserAuthorizationByEmail(email);
+        this.isPrivate = !isPrivate;
+    }
+
+    public void updateDescription(String email, String info) {
+        checkUserAuthorizationByEmail(email);
+        this.description = info;
+    }
+
+    public void updatePinned(String email) {
+        checkUserAuthorizationByEmail(email);
+        this.isPinned = !isPinned;
+    }
+
+    private void checkUserAuthorizationByEmail(String email) {
+        if (!email.equals(user.getEmail())) {
+            throw new UnauthorizedUserAccessException();
+        }
     }
 }
